@@ -27,16 +27,4 @@ export class TodoStore {
       );
     });
   }
-
-  addAll(todos: Todo[]) {
-    this.todos.next(todos);
-  }
-
-  addOne(student: Todo) {
-    this.todos.next([...this.todos.value, student]);
-  }
-
-  deleteOne(id: string) {
-    this.todos.next(this.todos.value.filter((s) => s.id !== id));
-  }
 }
