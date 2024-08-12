@@ -7,7 +7,7 @@ import { TodoHttp } from './todo-http.service';
   providedIn: 'root',
 })
 export class TodoStore {
-  private todos = new BehaviorSubject<Todo[]>([]);
+  private todos = new BehaviorSubject<Todo[] | null>(null);
   todos$ = this.todos.asObservable();
 
   constructor(private todoHttp: TodoHttp) {}
@@ -21,10 +21,16 @@ export class TodoStore {
   updateTodo(todo: Todo): void {
     this.todoHttp.updateTodo(todo).subscribe((todoUpdated: Todo) => {
       this.todos.next(
-        this.todos.value.map((t) =>
+        this.todos.value!.map((t) =>
           t.id === todoUpdated.id ? todoUpdated : t,
         ),
       );
+    });
+  }
+
+  deleteTodo(todo: Todo) {
+    this.todoHttp.deleteTodo(todo).subscribe(() => {
+      this.todos.next(this.todos.value!.filter((t) => t.id !== todo.id));
     });
   }
 }

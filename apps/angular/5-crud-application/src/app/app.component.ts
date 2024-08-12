@@ -8,12 +8,14 @@ import { TodoStore } from './services/todo-store.service';
   imports: [CommonModule],
   selector: 'app-root',
   template: `
-    <div *ngIf="todos$ | async as todos">
+    <div *ngIf="todos$ | async as todos; else loading">
       <div *ngFor="let todo of todos">
         {{ todo.title }}
         <button (click)="update(todo)">Update</button>
+        <button (click)="delete(todo)">Delete</button>
       </div>
     </div>
+    <ng-template #loading><div id="loading">...loading</div></ng-template>
   `,
   styles: [],
 })
@@ -28,5 +30,9 @@ export class AppComponent implements OnInit {
 
   update(todo: Todo): void {
     this.todoStore.updateTodo(todo);
+  }
+
+  delete(todo: Todo): void {
+    this.todoStore.deleteTodo(todo);
   }
 }
